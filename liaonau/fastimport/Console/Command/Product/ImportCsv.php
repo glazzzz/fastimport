@@ -3,7 +3,7 @@ namespace liaonau\fastimport\Console\Command\Product;
 
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use FireGento\FastSimpleImportDemo\Console\Command\AbstractImportCommand;
+use liaonau\fastimport\Console\Command\AbstractImportCommand;
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\ImportExport\Model\Import;
 use League\Csv\Reader;
