@@ -99,7 +99,20 @@ abstract class AbstractImportCommand extends Command
         $importerModel->setImportAdapterFactory($adapterFactory);
 
         try {
-            $importerModel->processImport($productsArray);
+            $len = count($productsArray);
+            if ($len > 0){
+              $len = $len - 1;
+              $left = 0;
+              $right = 10000;
+              if ($len < 10000){
+                $right = $len;
+              }
+              do {
+                $importerModel->processImport(array_slice($productsArray,$left,$right));
+                $left = $right +1;
+                $right = (($right + 10000) > $len ? $len : $right + 10000);
+              } while ($right < $len);
+            }
         } catch (\Exception $e) {
             $output->writeln($e->getMessage());
         }
