@@ -84,7 +84,6 @@ class ImportCsv extends AbstractImportCommand
     protected function readFile($fileName)
     {
         $path = $this->directory_list->getRoot();
-        echo $path
         $directoryRead = $this->readFactory->create($path);
         return $directoryRead->readFile($fileName);
     }
