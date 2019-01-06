@@ -100,18 +100,26 @@ abstract class AbstractImportCommand extends Command
 
         try {
             $len = count($productsArray);
+            $step = 10000;
+
             if ($len > 0){
               $len = $len - 1;
-              $left = 0;
-              $right = 10000;
-              if ($len < 10000){
-                $right = $len;
-              }
-              do {
+
+              $right = $step;
+
+              while ($left < $len){
+                if ($left + $step > $len){
+                  $right = $len - 1;
+            		} else {
+            			$right = $left + $step;
+            		}
+
+                $output->writeln("left: " . $left . " Rigth: " . $right);
                 $importerModel->processImport(array_slice($productsArray,$left,$right));
-                $left = $right +1;
-                $right = (($right + 10000) > $len ? $len : $right + 10000);
-              } while ($right < $len);
+                $left = $left + $step;
+                $left++;
+              }
+              
             }
         } catch (\Exception $e) {
             $output->writeln($e->getMessage());
