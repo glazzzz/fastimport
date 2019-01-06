@@ -101,6 +101,7 @@ abstract class AbstractImportCommand extends Command
         try {
             $len = count($productsArray);
             $step = 10000;
+            $left = 0;
 
             if ($len > 0){
               $len = $len - 1;
@@ -119,7 +120,7 @@ abstract class AbstractImportCommand extends Command
                 $left = $left + $step;
                 $left++;
               }
-              
+
             }
         } catch (\Exception $e) {
             $output->writeln($e->getMessage());
