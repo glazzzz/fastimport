@@ -86,12 +86,6 @@ abstract class AbstractImportCommand extends Command
 
         $output->writeln('Import started');
 
-        $stores = $this->objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStores(true, true);
-
-        foreach ($stores as $store){
-            $output->writeln($store);
-
-        }
         $time = microtime(true);
 
         /** @var \FireGento\FastSimpleImport\Model\Importer $importerModel */
