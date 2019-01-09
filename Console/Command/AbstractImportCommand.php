@@ -104,7 +104,6 @@ abstract class AbstractImportCommand extends Command
             $left = 0;
 
             if ($len > 0){
-              $len = $len - 1;
 
               $right = $step;
 
