@@ -110,7 +110,7 @@ abstract class AbstractImportCommand extends Command
 
               while ($left < $len){
                 if ($left + $step > $len){
-                  $right = $len - 1;
+                  $right = $len;
             		} else {
             			$right = $left + $step;
             		}
