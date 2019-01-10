@@ -46,7 +46,7 @@ abstract class AbstractImportCommand extends Command
     /**
      * @var int
      */
-    protected $pageSize;
+    protected $pageSize = 10000;
 
     /**
      * Constructor
