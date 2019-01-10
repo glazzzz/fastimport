@@ -104,15 +104,16 @@ abstract class AbstractImportCommand extends Command
         $this->page = 1;
 
         while ($this->page > 0){
+            $output->writeln("Page: " . $this->page);
             $productsArray = $this->getEntities();
+
+            $output->writeln("Records to import: " . count($productsArray));
 
             if (count($productsArray) < $this->pageSize){
                 $this->page = 0;
             } else {
                 $this->page++;
             }
-
-            $output->writeln("Page: " . $this->page);
 
             $importerModel->setBehavior($this->getBehavior());
             $importerModel->setEntityCode($this->getEntityCode());
