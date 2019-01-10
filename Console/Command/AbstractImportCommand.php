@@ -39,6 +39,16 @@ abstract class AbstractImportCommand extends Command
     private $objectManagerFactory;
 
     /**
+     * @var int
+     */
+    protected $page;
+
+    /**
+     * @var int
+     */
+    protected $pageSize;
+
+    /**
      * Constructor
      *
      * @param ObjectManagerFactory $objectManagerFactory
@@ -91,42 +101,52 @@ abstract class AbstractImportCommand extends Command
         /** @var \FireGento\FastSimpleImport\Model\Importer $importerModel */
         $importerModel = $this->objectManager->create('FireGento\FastSimpleImport\Model\Importer');
 
-        $productsArray = $this->getEntities();
+        $this->page = 1;
 
-        $importerModel->setBehavior($this->getBehavior());
-        $importerModel->setEntityCode($this->getEntityCode());
-        $adapterFactory = $this->objectManager->create('FireGento\FastSimpleImport\Model\Adapters\NestedArrayAdapterFactory');
-        $importerModel->setImportAdapterFactory($adapterFactory);
+        while ($this->page > 0){
+            $productsArray = $this->getEntities();
 
-        try {
-            $len = count($productsArray);
-            $step = 10000;
-            $left = 0;
-
-            if ($len > 0){
-
-              $right = $step;
-
-              while ($left < $len){
-                if ($left + $step > $len){
-                  $right = $len;
-            		} else {
-            			$right = $left + $step;
-            		}
-
-                $output->writeln("left: " . $left . " Rigth: " . $right);
-                $importerModel->processImport(array_slice($productsArray,$left,$right));
-                $left = $left + $step;
-                $left++;
-              }
-
+            if (count($productsArray) < $this->pageSize){
+                $this->page = 0;
+            } else {
+                $this->page++;
             }
-        } catch (\Exception $e) {
-            $output->writeln($e->getMessage());
-        }
 
-        $output->write($importerModel->getLogTrace());
-        $output->write($importerModel->getErrorMessages());
+            $output->writeln("Page: " . $this->page);
+
+            $importerModel->setBehavior($this->getBehavior());
+            $importerModel->setEntityCode($this->getEntityCode());
+            $adapterFactory = $this->objectManager->create('FireGento\FastSimpleImport\Model\Adapters\NestedArrayAdapterFactory');
+            $importerModel->setImportAdapterFactory($adapterFactory);
+
+            try {
+                $len = count($productsArray);
+                $step = 5000;
+                $left = 0;
+
+                if ($len > 0){
+
+                    while ($left < $len){
+                        if ($left + $step > $len){
+                            $right = $len;
+                        } else {
+                            $right = $left + $step;
+                        }
+
+                        $output->writeln("left: " . $left . " Rigth: " . $right);
+                        $importerModel->processImport(array_slice($productsArray,$left,$right));
+                        $left = $left + $step;
+                        $left++;
+                    }
+
+                }
+            } catch (\Exception $e) {
+                $output->writeln($e->getMessage());
+            }
+
+            $output->write($importerModel->getLogTrace());
+            $output->write($importerModel->getErrorMessages());
+        }
 
         $output->writeln('Import finished. Elapsed time: ' . round(microtime(true) - $time, 2) . 's' . "\n");
         $this->afterFinishImport();
