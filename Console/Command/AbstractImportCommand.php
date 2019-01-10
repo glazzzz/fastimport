@@ -105,8 +105,11 @@ abstract class AbstractImportCommand extends Command
 
         while ($this->page > 0){
             $output->writeln("Page: " . $this->page);
+            try{
             $productsArray = $this->getEntities();
-
+            }	 catch(\Exception $e) {
+                $output->writeln($e->getMessage());
+            }
             $output->writeln("Records to import: " . count($productsArray));
 
             if (count($productsArray) < $this->pageSize){

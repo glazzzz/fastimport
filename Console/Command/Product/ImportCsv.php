@@ -59,7 +59,6 @@ class ImportCsv extends AbstractImportCommand
     protected function getEntities()
     {
         $data = array();
-        try{
         $csvIterationObject = $this->readCSV();
         // Do mapping here:
         echo ("Number of records: " . count($csvIterationObject). " Start from: " . (($this->page-1) * $this->pageSize+1). "\n");
@@ -68,9 +67,7 @@ class ImportCsv extends AbstractImportCommand
             $data[]  = $row;
         }
         //  Mapping end
-        }	 catch(\Exception $e) {
-            echo $e->getMessage();
-        }
+
 
         return $data;
     }
