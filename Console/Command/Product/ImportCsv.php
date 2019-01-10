@@ -22,6 +22,10 @@ class ImportCsv extends AbstractImportCommand
      */
     private $directory_list;
 
+    /**
+     * @var DirectoryList
+     */
+    private $csvArray;
 
     /**
      * Constructor
@@ -62,7 +66,7 @@ class ImportCsv extends AbstractImportCommand
         $csvIterationObject = $this->readCSV();
         $data = array();
         // Do mapping here:
-        echo ("Number of records: " . count($csvIterationObject). " Start from: " . ($this->page-1)* $this->pageSize. "\n");
+        echo ("Number of records: " . count($csvIterationObject). " Start from: " . ($this->page-1). "\n");
         $csvIterationObject = array_slice($csvIterationObject, ($this->page-1) * $this->pageSize, $this->pageSize);
         foreach($csvIterationObject as $row){
             $data[]  = $row;
@@ -75,11 +79,16 @@ class ImportCsv extends AbstractImportCommand
 
     protected function readCSV()
     {
-        $csvObj = Reader::createFromString($this->readFile(static::IMPORT_FILE));
-        $csvObj->setDelimiter(',');
-        $csvObj->setHeaderOffset(0);
-        $results = (new Statement())->process($csvObj);
-        return $results;
+        if (!$this->csvArray){
+            $csvObj = Reader::createFromString($this->readFile(static::IMPORT_FILE));
+            $csvObj->setDelimiter(',');
+            $csvObj->setHeaderOffset(0);
+            $this->csvArray = (new Statement())->process($csvObj);
+        }
+
+        echo gettype($this->csvArray);
+
+        return $this->csvArray;
 
     }
 
