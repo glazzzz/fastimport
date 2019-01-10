@@ -77,14 +77,12 @@ class ImportCsv extends AbstractImportCommand
             $csvObj = Reader::createFromString($this->readFile(static::IMPORT_FILE));
             $csvObj->setDelimiter(',');
             $csvObj->setHeaderOffset(0);
-            $statement = new Statement();
-            $statement->offset(($this->page-1) * $this->pageSize+1);
-            $statement->limit($this->pageSize);
 
-            $result = ($statement)->process($csvObj);
+        $statement = (new Statement())
+            ->offset(($this->page - 1) * $this->pageSize + 1)
+            ->limit($this->pageSize);
 
-
-
+        $result = $statement->process($csvObj);
 
         return $result;
 
