@@ -61,7 +61,7 @@ class ImportCsv extends AbstractImportCommand
         $csvIterationObject = $this->readCSV();
         $data = array();
         // Do mapping here:
-        echo ("Number of records: " . count($csvIterationObject). " Start from: " . ($this->page-1) * $this->pageSize. "\n");
+        echo ("Number of records: " . count($csvIterationObject). " Start from: " . (($this->page-1) * $this->pageSize+1). "\n");
 
         foreach($csvIterationObject as $row){
             $data[]  = $row;
@@ -78,7 +78,7 @@ class ImportCsv extends AbstractImportCommand
             $csvObj->setDelimiter(',');
             $csvObj->setHeaderOffset(0);
             $statement = new Statement();
-            $statement->offset(($this->page-1) * $this->pageSize);
+            $statement->offset(($this->page-1) * $this->pageSize+1);
             $statement->limit($this->pageSize);
 
             $result = ($statement)->process($csvObj);
