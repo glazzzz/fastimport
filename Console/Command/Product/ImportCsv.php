@@ -58,8 +58,9 @@ class ImportCsv extends AbstractImportCommand
      */
     protected function getEntities()
     {
-        $csvIterationObject = $this->readCSV();
         $data = array();
+        try{
+        $csvIterationObject = $this->readCSV();
         // Do mapping here:
         echo ("Number of records: " . count($csvIterationObject). " Start from: " . (($this->page-1) * $this->pageSize+1). "\n");
 
@@ -67,6 +68,9 @@ class ImportCsv extends AbstractImportCommand
             $data[]  = $row;
         }
         //  Mapping end
+        }	 catch(\Exception $e) {
+            echo $e->getMessage();
+        }
 
         return $data;
     }
@@ -78,11 +82,15 @@ class ImportCsv extends AbstractImportCommand
             $csvObj->setDelimiter(',');
             $csvObj->setHeaderOffset(0);
 
-        $statement = (new Statement())
-            ->offset(($this->page - 1) * $this->pageSize + 1)
-            ->limit($this->pageSize);
+            $statement = (new Statement())
+                ->offset(($this->page - 1) * $this->pageSize + 1)
+                ->limit($this->pageSize);
 
-        $result = $statement->process($csvObj);
+            $result = $statement->process($csvObj);
+
+
+
+
 
         return $result;
 
