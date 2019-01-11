@@ -76,7 +76,7 @@ class ImportCsv extends AbstractImportCommand
     {
 
             $csvObj = Reader::createFromString($this->readFile(static::IMPORT_FILE));
-            $csvObj->setDelimiter(',');
+            $csvObj->setDelimiter('|');
             $csvObj->setHeaderOffset(0);
 
             $statement = (new Statement())
